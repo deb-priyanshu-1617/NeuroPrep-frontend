@@ -1,117 +1,126 @@
-🚀 NeuroPrep – Adaptive Interview Simulator (Frontend)
+# 🚀 NeuroPrep – Adaptive Interview Simulator (Frontend)
 
-A triggering-based interview simulation frontend built to mimic real FAANG technical interviews.
-This UI consumes an adaptive backend engine that dynamically selects questions based on user performance, difficulty progression, and weak topics.
+A decision-driven interview simulation frontend built to mimic real FAANG-style technical interviews.
 
-Not a practice app.
-An interview simulation system.
+NeuroPrep is not a practice app.  
+It is an interview simulation system that visualizes how interviewers dynamically adjust questions based on a candidate's performance.
 
-🎯 Purpose of This Project
+This frontend consumes an adaptive backend engine that selects questions using difficulty progression, weak-topic prioritization, and interview history.
 
-Most platforms show random problems.
+## 📸 Interview Simulation Screenshots
+
+### 🧠 Question & Timer View
+![Question Screen](./screenshots/interview-question.png)
+
+### 📊 Interview Summary & Feedback
+![Interview Summary](./screenshots/interview-summary.png)
+
+Screenshots demonstrate real interview flow, candidate reasoning via scratchpad, and final performance evaluation.
+
+## 🎯 Purpose of This Project
+
+Most coding platforms:
+
+- Show random or static problems
+- Ignore candidate performance patterns
+- Do not simulate interviewer decision-making
+
 NeuroPrep simulates how real interviewers think:
 
-Adjusts difficulty dynamically
+- 🔼 Adjusts difficulty dynamically
+- 🎯 Targets weak topics first
+- 🔁 Avoids repetition until exhaustion
+- ⏱️ Forces decision pressure
+- 🧠 Focuses on reasoning, not just answers
 
-Targets weak topics first
+## 🧠 What Makes This Frontend FAANG-Grade
 
-Avoids repetition
+- ✅ Interview-style flow (not list-based solving)
+- ✅ State-driven UI (level, progress, decision feedback)
+- ✅ Backend-agnostic & production-ready architecture
+- ✅ Clean separation of concerns (UI ↔ decision engine)
+- ✅ Designed for real users, analytics & extension
 
-Forces decision pressure
+## 🖥️ Core Features
 
-This frontend is designed to visualize that intelligence clearly and realistically.
+- 📌 Question display (topic, difficulty, expected time)
+- 📊 Live interview progress (Question 1 → 10)
+- ⏳ Per-question timer (auto-fail on timeout)
+- 🧠 Scratchpad for candidate reasoning
+- 🔁 Adaptive next-question flow
+- 🎯 Interview-style action buttons (Solved / Failed)
+- 📈 Final interview summary & recommendation
+- 🛡️ Graceful handling of edge cases (no crashes)
 
-🧠 What Makes This Frontend FAANG-Grade
+## 🛠️ Tech Stack
 
-✅ Interview-style flow (not list-based solving)
-✅ State-driven UI (level, progress, decision feedback)
-✅ Backend-agnostic architecture
-✅ Ready for real users & analytics
-✅ Clean separation from backend (production practice)
+### Frontend
+- React (Vite)
+- JavaScript (ES6+)
+- React Router
+- CSS
+- Modular component architecture
 
-🖥️ Current Features
+### Backend (Consumed API)
+- Node.js
+- Express.js
+- Adaptive decision engine
+- In-memory state (DB-ready design)
 
-📌 Question display (topic, difficulty, expected time)
+## 📂 Project Structure
 
-📊 Live level indicator
-
-🔁 Adaptive next-question flow
-
-⏳ Loading & transition states
-
-🧠 Interview-style action buttons (Solved / Failed)
-
-🛠️ Tech Stack
-
-React (Vite)
-
-JavaScript (ES6+)
-
-CSS
-
-Modular component architecture
-
-📂 Project Structure
+```
 src/
 ├── api/
-│   └── questionApi.js        # Backend communication
+│   └── questionApi.js
 ├── components/
+│   ├── InterviewSimulation.jsx
 │   ├── QuestionCard.jsx
-│   ├── LevelInfo.jsx
+│   ├── Scratchpad.jsx
+│   ├── Timer.jsx
 │   ├── ActionButtons.jsx
-│   └── Loader.jsx
-├── pages/
-│   └── PracticePage.jsx
+│   └── LevelInfo.jsx
 ├── hooks/
-├── assets/
+│   └── useQuestionFlow.js
+├── pages/
+│   ├── PracticePage.jsx
+│   └── InterviewSummary.jsx
+├── config/
+│   └── interviewConfig.js
 ├── App.jsx
 └── main.jsx
+```
 
-🔌 Backend Integration
+## 🔌 Backend Integration
 
-This frontend consumes the NeuroPrep Backend API:
+### 🌐 Deployed Backend
+[https://neuraprep.onrender.com](https://neuraprep.onrender.com)
 
-Base URL
+### 🔑 APIs Used
+- GET /api/next-question/:userId
+- POST /api/submitResult
+- POST /api/reset-session/:userId
 
-https://neuraprep.onrender.com
+### 🧠 Backend Repository
+👉 [https://github.com/deb-priyanshu-1617/NeuroPrep-backend](https://github.com/deb-priyanshu-1617/NeuroPrep-backend)
 
-Key Endpoints Used
+## 🚀 Local Setup
 
-GET /api/next-question/:userId
-
-POST /api/submitResult
-
-[Backend repo 👉](https://github.com/deb-priyanshu-1617/NeuroPrep-backend)
-
-🚧 Roadmap (Planned)
-
-🧪 Interview Simulation Mode (timed, no hints)
-
-💻 In-browser Code Editor
-
-📈 Performance Analytics Dashboard
-
-🔐 Auth & User Profiles
-
-📊 Topic-wise strength visualization
-
-🎥 Mock interview replay mode
-
-🧪 Local Setup
-git clone <frontend-repo-url>
+```bash
+git clone https://github.com/deb-priyanshu-1617/NeuroPrep-frontend
 cd NeuroPrep-frontend
 npm install
 npm run dev
+```
 
-👨‍💻 Author
+Open in browser: [http://localhost:5173/practice/242](http://localhost:5173/practice/242)
 
-Priyanshu Maurya
-Backend + Systems | DSA | Interview Engineering
+Uses the deployed backend — no local backend setup required.
+
+## 👨‍💻 Author
+
+**Priyanshu Maurya**  
+Backend & Systems | DSA | Interview Engineering  
 NIET, India
 
 Building systems that think like interviewers — not platforms that dump problems.
-
-⭐ Why This Project Matters
-
-This is not CRUD.
-This is decision-driven engineering — exactly what FAANG looks for.

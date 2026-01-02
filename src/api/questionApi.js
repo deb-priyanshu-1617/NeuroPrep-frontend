@@ -1,12 +1,11 @@
-// ================================
-// API BASE URL (LOCAL BACKEND)
-// ================================
-const BASE_URL = "http://localhost:3000/api";
 
-/* =================================
-   GET NEXT QUESTION
-================================= */
-export const getNextQuestion = async (userId = 241) => {
+// API BASE URL (DEPLOYED BACKEND)
+
+const BASE_URL = "https://neuraprep.onrender.com/api";
+
+/* 
+   GET NEXT QUESTION*/
+export const getNextQuestion = async (userId = 242) => {
   try {
     const res = await fetch(`${BASE_URL}/next-question/${userId}`);
 
@@ -23,9 +22,9 @@ export const getNextQuestion = async (userId = 241) => {
   }
 };
 
-/* =================================
+/* 
    SUBMIT RESULT (solved / fail)
-================================= */
+ */
 export const submitResult = async (userId, result) => {
   try {
     const res = await fetch(`${BASE_URL}/submitResult`, {
@@ -49,9 +48,9 @@ export const submitResult = async (userId, result) => {
   }
 };
 
-/* =================================
+/* 
    RESET INTERVIEW SESSION
-================================= */
+ */
 export const resetInterviewSession = async (userId) => {
   try {
     const res = await fetch(`${BASE_URL}/reset-session/${userId}`, {

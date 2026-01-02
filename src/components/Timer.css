@@ -1,0 +1,13 @@
+.timer {
+  font-size: 14px;
+  font-weight: 600;
+  color: #4caf50;
+}
+
+.timer.warning {
+  color: #ff9800;
+}
+
+.timer.danger {
+  color: #f44336;
+}
