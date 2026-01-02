@@ -3,32 +3,38 @@ import ActionButtons from "../components/ActionButtons";
 import LevelInfo from "../components/LevelInfo";
 import QuestionCard from "../components/QuestionCard";
 import useQuestionFlow from "../hooks/useQuestionFlow";
+import InterviewSimulation from "../components/InterviewSimulation";
 
 const PracticePage = () => {
-  const { question, levelChange, loading, error, submitAnswer } = useQuestionFlow(242);
+  const { question, levelChange, loading, error, submitAnswer } =
+    useQuestionFlow(242);
 
-  if (loading) return <div className="card"><p>Loading...</p></div>;
-  if (error) return <div className="card"><p className="muted">{error}</p></div>;
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
 
   return (
     <>
-      {question ? (
+      <InterviewSimulation
+        current={question?.id ?? 0}
+        total={10}
+        completed={!question}
+      />
+
+      {question && (
         <>
-          {/* <header><InterviewSimulation /></header> */}
-          <section className="col card">
+          <section className="card">
             <QuestionCard question={question} />
+
             <ActionButtons
               onSolved={() => submitAnswer("solved")}
-              onFailed={() => submitAnswer("fail")}
+              onFailed={() => submitAnswer("failed")}
             />
           </section>
 
-          <aside className="side card">
+          <aside className="card">
             <LevelInfo levelChange={levelChange} />
           </aside>
         </>
-      ) : (
-        <div className="card"><p className="muted">No question available</p></div>
       )}
     </>
   );

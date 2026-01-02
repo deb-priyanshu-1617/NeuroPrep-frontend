@@ -1,50 +1,18 @@
-import { useState } from "react";
-import QuestionCard from "./QuestionCard";
-import ActionButtons from "./ActionButtons";
-import LevelInfo from "./LevelInfo";
+import React from "react";
 
-const InterviewSimulation = () => {
-  const TOTAL_QUESTIONS = 10;
-
-  const [current, setCurrent] = useState(1);
-  const [history, setHistory] = useState([]);
-
-  // Interview finished
-  if (current > TOTAL_QUESTIONS) {
-    const solvedCount = history.filter(h => h === "solved").length;
-    const failedCount = history.filter(h => h === "failed").length;
-
-    return (
-      <div style={{ textAlign: "center" }}>
-        <h1>Interview Completed</h1>
-        <p>Total Questions: {TOTAL_QUESTIONS}</p>
-        <p>Solved: {solvedCount}</p>
-        <p>Failed: {failedCount}</p>
-      </div>
-    );
-  }
-
+const InterviewSimulation = ({ current, total, completed }) => {
   return (
-    <div style={{ maxWidth: "800px", margin: "0 auto" }}>
-      <h1>Interview Mode</h1>
-      <p>
-        Question {current} / {TOTAL_QUESTIONS}
-      </p>
+    <div className="interview-header">
+      <h1>Adaptive DSA Practice</h1>
+      <p className="muted">Questions adapt based on your performance</p>
 
-      <QuestionCard />
-
-      <ActionButtons
-        onSolved={() => {
-          setHistory([...history, "solved"]);
-          setCurrent(current + 1);
-        }}
-        onFailed={() => {
-          setHistory([...history, "failed"]);
-          setCurrent(current + 1);
-        }}
-      />
-
-      <LevelInfo />
+      {!completed ? (
+        <p>
+          Interview Mode — Question {current} / {total}
+        </p>
+      ) : (
+        <p>Interview Completed</p>
+      )}
     </div>
   );
 };
