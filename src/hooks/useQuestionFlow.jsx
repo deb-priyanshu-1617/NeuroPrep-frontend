@@ -1,55 +1,80 @@
 import { useState, useEffect } from "react";
 import { getNextQuestion, submitResult } from "../api/questionApi.js";
 
-const useQuestionFlow = (userId) => {
-  if (!userId) {
-    console.warn("⚠️ userId missing!");
-  }
+const TOTAL_QUESTIONS = 10;
 
+const useQuestionFlow = (userId) => {
   const [question, setQuestion] = useState(null);
   const [levelChange, setLevelChange] = useState(null);
+  const [message, setMessage] = useState(null);
+  const [suggestion, setSuggestion] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const [current, setCurrent] = useState(1);
+  const [solvedCount, setSolvedCount] = useState(0);
+  const [failedCount, setFailedCount] = useState(0);
+
   const fetchNextQuestion = async () => {
-    console.log("Fetching question for userId:", userId);
     try {
       setLoading(true);
       setError(null);
 
-      const data = await getNextQuestion(userId || 242);
-      console.log("API RAW DATA:", data);
+      const res = await getNextQuestion(userId);
+      const payload = res?.data;
 
-      // ✅ FIXED: your backend gives data.data (not data.data.data)
-      const nextQ = data?.data || data?.nextQuestion || null;
-      const level = data?.levelChange || null;
+      if (payload?.message) {
+        setQuestion(null);
+        setMessage(payload.message);
+        setSuggestion(payload.suggestion);
+        return;
+      }
 
-      console.log("nextQ computed:", nextQ);
-
-      setQuestion(nextQ);
-      setLevelChange(level);
+      setQuestion(payload);
+      setLevelChange(res.levelChange || null);
     } catch (err) {
-      setError("Failed to fetch next question");
+      setError("Failed to fetch question");
       console.error(err);
     } finally {
       setLoading(false);
     }
   };
 
-  const submitAnswer = async (result = "solved") => {
+  const submitAnswer = async (result) => {
     try {
       setLoading(true);
       setError(null);
 
-      const data = await submitResult(userId, result);
-      console.log("Submit response:", data);
+      // ✅ update counts FIRST
+      if (result === "solved") {
+        setSolvedCount((c) => c + 1);
+      } else {
+        setFailedCount((c) => c + 1);
+      }
 
-      // ✅ FIXED same here
-      const nextQ = data?.data || data?.nextQuestion || null;
-      const level = data?.levelChange || null;
+      const res = await submitResult(userId, result);
+      const payload = res?.data;
 
-      setQuestion(nextQ);
-      setLevelChange(level);
+      setCurrent((c) => c + 1);
+
+      // ✅ Interview complete by count
+      if (current >= TOTAL_QUESTIONS) {
+        setQuestion(null);
+        setMessage("Interview completed successfully.");
+        setSuggestion("Review your performance below.");
+        return;
+      }
+
+      // ✅ Backend exhaustion
+      if (payload?.message) {
+        setQuestion(null);
+        setMessage(payload.message);
+        setSuggestion(payload.suggestion);
+        return;
+      }
+
+      setQuestion(payload);
+      setLevelChange(res.levelChange || null);
     } catch (err) {
       setError("Failed to submit answer");
       console.error(err);
@@ -60,14 +85,18 @@ const useQuestionFlow = (userId) => {
 
   useEffect(() => {
     fetchNextQuestion();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
 
   return {
     question,
     levelChange,
+    message,
+    suggestion,
     loading,
     error,
+    current,
+    solvedCount,
+    failedCount,
     submitAnswer,
   };
 };

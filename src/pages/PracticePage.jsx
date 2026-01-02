@@ -1,42 +1,73 @@
 import React from "react";
+import InterviewSimulation from "../components/InterviewSimulation";
+import QuestionCard from "../components/QuestionCard";
 import ActionButtons from "../components/ActionButtons";
 import LevelInfo from "../components/LevelInfo";
-import QuestionCard from "../components/QuestionCard";
+import Timer from "../components/Timer";
 import useQuestionFlow from "../hooks/useQuestionFlow";
-import InterviewSimulation from "../components/InterviewSimulation";
+import InterviewSummary from "./InterviewSummary";
+
+const TOTAL_QUESTIONS = 10;
 
 const PracticePage = () => {
-  const { question, levelChange, loading, error, submitAnswer } =
-    useQuestionFlow(242);
+  const {
+    question,
+    levelChange,
+    message,
+    loading,
+    error,
+    current,
+    solvedCount,
+    failedCount,
+    submitAnswer,
+  } = useQuestionFlow(242);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
 
+  /* ===============================
+     INTERVIEW COMPLETED
+     =============================== */
+  if (!question && message) {
+    return (
+      <InterviewSummary
+        total={solvedCount + failedCount}
+        solved={solvedCount}
+        failed={failedCount}
+        finalLevel={levelChange?.newLevel || "easy"}
+        weakestTopic="Recursion"
+        userId={242}
+      />
+    );
+  }
+
+  /* ===============================
+     ACTIVE INTERVIEW
+     =============================== */
   return (
-    <>
+    <div className="page">
       <InterviewSimulation
-        current={question?.id ?? 0}
-        total={10}
-        completed={!question}
+        current={current}
+        total={TOTAL_QUESTIONS}
+        completed={false}
       />
 
-      {question && (
-        <>
-          <section className="card">
-            <QuestionCard question={question} />
+      <div className="card">
+        <Timer
+          minutes={question.expectedTime || 10}
+          onTimeout={() => submitAnswer("fail")}
+        />
 
-            <ActionButtons
-              onSolved={() => submitAnswer("solved")}
-              onFailed={() => submitAnswer("failed")}
-            />
-          </section>
+        <QuestionCard question={question} />
 
-          <aside className="card">
-            <LevelInfo levelChange={levelChange} />
-          </aside>
-        </>
-      )}
-    </>
+        <ActionButtons
+          onSolved={() => submitAnswer("solved")}
+          onFailed={() => submitAnswer("fail")}
+        />
+      </div>
+
+      <LevelInfo levelChange={levelChange} />
+    </div>
   );
 };
 
